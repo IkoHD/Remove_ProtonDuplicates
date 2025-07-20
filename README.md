@@ -54,7 +54,9 @@ After successfully importing your cleaned data and deleting your old vault in Pr
 The delete.py script automates the deletion process for you.
 
 1. **Open a terminal** or command prompt, navigate to the folder where you saved the scripts and CSV files, and run the deletion script:  
+   ```bash
    python delete.py
+   ```
 
    This script will automatically find and delete both the original protonpass_export_*.csv file(s) and the protonpass_export_cleaned.csv file.
 
