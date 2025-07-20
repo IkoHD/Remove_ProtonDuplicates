@@ -1,33 +1,46 @@
 import pandas as pd
+import os
 
-# Lege hier die Dateinamen fest.
-# Stelle sicher, dass die Eingabedatei im selben Ordner wie das Skript liegt.
-input_filename = 'protonpass_export.csv'
+# 1. Define the file prefix and the name for the output file.
+# The script will look for any .csv file that starts with this prefix.
+file_prefix = 'protonpass_export'
 output_filename = 'protonpass_export_cleaned.csv'
 
+# --- Automatically find the input file ---
+input_filename = None
 try:
-    # 1. CSV-Datei einlesen
-    # Pandas liest die Daten in eine Tabelle, einen sogenannten DataFrame.
+    for file in os.listdir('.'):
+        # Check if a file in the current directory starts with the prefix and is a csv
+        if file.startswith(file_prefix) and file.endswith('.csv'):
+            input_filename = file
+            break  # Stop after finding the first matching file
+
+    if not input_filename:
+        # Raise an error if no matching file was found
+        raise FileNotFoundError(f"No CSV file starting with '{file_prefix}' found in this directory.")
+
+    # --- Process the found file ---
+    print(f"Input file found: {input_filename}")
+    
+    # 2. Read the CSV file
+    # Pandas reads the data into a table structure called a DataFrame.
     df = pd.read_csv(input_filename)
     
-    print(f"Datei '{input_filename}' wurde geladen.")
-    print(f"Anzahl der Zeilen vor der Bereinigung: {len(df)}")
+    print(f"Number of rows before cleaning: {len(df)}")
     
-    # 2. Duplikate entfernen
-    # drop_duplicates() entfernt alle Zeilen, die in allen Spalten identische Werte haben.
-    # Um Duplikate nur anhand bestimmter Spalten zu finden (z.B. 'name' und 'username'),
+    # 3. Remove duplicates
+    # Duplicates are identified based on the combination of these columns.
     df_cleaned = df.drop_duplicates(subset=['name', 'username', 'url'])
     
-    # 3. Bereinigte Daten in eine neue CSV-Datei schreiben
-    # index=False verhindert, dass Pandas eine zusätzliche Spalte mit Zeilennummern hinzufügt.
+    # 4. Write the cleaned data to a new CSV file
+    # index=False prevents pandas from writing a new column for row numbers.
     df_cleaned.to_csv(output_filename, index=False)
     
-    print(f"Anzahl der Zeilen nach der Bereinigung: {len(df_cleaned)}")
-    print(f"Die bereinigten Daten wurden in '{output_filename}' gespeichert. ✅")
-    
-except FileNotFoundError:
-    print(f"FEHLER: Die Datei '{input_filename}' konnte nicht gefunden werden.")
-    print("Bitte überprüfe, ob der Dateiname korrekt ist und die Datei sich im richtigen Ordner befindet.")
+    print(f"Number of rows after cleaning: {len(df_cleaned)}")
+    print(f"Cleaned data has been saved to '{output_filename}'. ✅")
+
+except FileNotFoundError as e:
+    print(f"ERROR: {e}")
 
 except Exception as e:
-    print(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
+    print(f"An unexpected error occurred: {e}")
