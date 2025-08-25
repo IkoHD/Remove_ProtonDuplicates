@@ -21,7 +21,7 @@ pip install pandas
 **Download the script** and place it in a new folder on your computer.  
 
 
-### **2. Export your Vault as CDV**
+### **2. Export your Vault as CSV**
 1.  Click on Settings (bottom left next to your profile)
 2.  Go to Export
 3.  Export as CSV
@@ -71,3 +71,4 @@ If you prefer to delete the files manually:
 ## **License**
 
 This project is licensed under the **MIT License**. See the LICENSE file for more details. You are free to use, modify, and distribute this script.
+
